@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Adapter.CartAdapter;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.ProductModel;
+import com.example.e_commerce.Model.ProductModelBuilder;
 import com.example.e_commerce.R;
 import com.example.e_commerce.activity.CustomDialogClass;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,6 +68,8 @@ public class Cart extends Fragment implements LocationListener {
 
     int PERMISSION_ID = 44;
     String value=null;
+    private Context context;
+
     public Cart() {
         // Required empty public constructor
 
@@ -185,13 +188,16 @@ public class Cart extends Fragment implements LocationListener {
         for (int i = 0; i < ids.size(); i++) {
             Cursor cursor = database.getProductbyId(String.valueOf(ids.get(i)));
             if (cursor != null) {
-                ProductModel productModel = new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
-                        Integer.parseInt(cursor.getString(5)),
-                        cursor.getString(1), cursor.getBlob(2),
-                        Double.parseDouble(cursor.getString(3)));
-                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
-                data.add(productModel);
-                cost+=Double.parseDouble(cursor.getString(3));
+                ProductModelBuilder productModel = new ProductModelBuilder(context);
+                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
+                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
+                        .setProName(cursor.getString(1))
+                        .setProImage(cursor.getBlob(2))
+                        .setPrice(Double.parseDouble(cursor.getString(3)))
+                        .build();
+                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
+                data.add(productModel.build());
+                cost+=Double.parseDouble((cursor.getString(3)));
             }
         }
     }

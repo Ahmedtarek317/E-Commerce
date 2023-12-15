@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import com.example.e_commerce.Model.CategoryModel;
 import com.example.e_commerce.Model.CustomerModel;
 import com.example.e_commerce.Model.ProductModel;
+import com.example.e_commerce.Model.ProductModelBuilder;
+
 import java.util.ArrayList;
 
 public class MyDatabase extends SQLiteOpenHelper {

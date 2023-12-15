@@ -6,6 +6,10 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -23,7 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.CustomDialogClass"></activity>
+        <activity android:name=".activity.CustomDialogClass"/>
         <activity android:name=".activity.ChartGenerated" />
         <activity android:name=".activity.ReportGenerated" />
         <activity android:name=".activity.UserLocation" />
@@ -46,7 +50,6 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.Forget_password" />
         <activity android:name=".activity.AdminLogin" />
-        <activity android:name=".activity.Choise" />
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.UploadProduct" />
         <activity android:name=".activity.SignUp" />

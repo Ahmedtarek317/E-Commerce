@@ -9,38 +9,57 @@ import com.example.e_commerce.fragment.Cart;
 import com.example.e_commerce.fragment.Home;
 import com.example.e_commerce.fragment.Search;
 
+// Factory interface for creating fragments
+interface FragmentFactory {
+    Fragment createFragment();
+}
+
+// Concrete implementations of the factory interface
+class HomeFactory implements FragmentFactory {
+    @Override
+    public Fragment createFragment() {
+        return new Home();
+    }
+}
+
+class SearchFactory implements FragmentFactory {
+    @Override
+    public Fragment createFragment() {
+        return new Search();
+    }
+}
+
+class CartFactory implements FragmentFactory {
+    @Override
+    public Fragment createFragment() {
+        return new Cart();
+    }
+}
+
 public class FragmentAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Home",  "Search","My Cart" };
+    private String tabTitles[] = new String[]{"Home", "Search", "My Cart"};
     private Context context;
+    private FragmentFactory[] fragmentFactories;
 
-
-
-    public FragmentAdapter(FragmentManager fm , Context context) {
+    public FragmentAdapter(FragmentManager fm, Context context) {
         super(fm);
-        this.context=context;
+        this.context = context;
 
+        // Initialize fragment factories
+        fragmentFactories = new FragmentFactory[]{
+                new HomeFactory(),
+                new SearchFactory(),
+                new CartFactory()
+        };
     }
 
     @Override
     public Fragment getItem(int position) {
-
-        Fragment fragment = null;
-        switch (position) {
-            case 0:
-                fragment = new Home();
-                break;
-            case 1:
-                fragment = new Search();
-                break;
-            case 2:
-                fragment = new Cart();
-                break;
-        }
-        return fragment;
+        // Use the factory to create fragments
+        return fragmentFactories[position].createFragment();
     }
-
 
     @Nullable
     @Override

@@ -2,6 +2,7 @@ package com.example.e_commerce.fragment;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Adapter.ProductAdabter;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.ProductModel;
+import com.example.e_commerce.Model.ProductModelBuilder;
 import com.example.e_commerce.R;
 import com.example.e_commerce.activity.ScanCodeActivity;
 
@@ -51,6 +53,7 @@ public class Home extends Fragment {
     private Spinner categories;
     ArrayAdapter adapter_cate;
     ScanCodeActivity scanCodeActivity;
+    private Context context;
 
 
     public Home() {
@@ -116,8 +119,9 @@ public class Home extends Fragment {
                     adabter=new ProductAdabter(getContext(),0,products);
                     listView.setAdapter(adabter);
                 }
-                else
-                searchByCategory(categories.getSelectedItem().toString());
+                else {
+                    searchByCategory(categories.getSelectedItem().toString());
+                }
             }
 
             @Override
@@ -177,12 +181,15 @@ public class Home extends Fragment {
         products.clear();
         if (cursor != null) {
             while (!cursor.isAfterLast()) {
-                ProductModel productModel=new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
-                        Integer.parseInt(cursor.getString(5)),
-                        cursor.getString(1), cursor.getBlob(2),
-                        Double.parseDouble(cursor.getString(3)));
-                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
-                products.add(productModel);
+                ProductModelBuilder productModel = new ProductModelBuilder(context);
+                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
+                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
+                        .setProName(cursor.getString(1))
+                        .setProImage(cursor.getBlob(2))
+                        .setPrice(Double.parseDouble(cursor.getString(3)))
+                        .build();
+                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
+                products.add(productModel.build());
                 cursor.moveToNext();
             }
         }
@@ -211,14 +218,15 @@ public class Home extends Fragment {
         Cursor cursor = database.getProductbyCategor(cat_id);
         if (cursor != null) {
             while (!cursor.isAfterLast()) {
-
-                ProductModel productModel=new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
-                        Integer.parseInt(cursor.getString(5)),
-                        cursor.getString(1), cursor.getBlob(2),
-                        Double.parseDouble(cursor.getString(3)));
-                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
-                filterlist.add(productModel);
-
+                ProductModelBuilder productModel = new ProductModelBuilder(context);
+                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
+                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
+                        .setProName(cursor.getString(1))
+                        .setProImage(cursor.getBlob(2))
+                        .setPrice(Double.parseDouble(cursor.getString(3)))
+                        .build();
+                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
+                filterlist.add(productModel.build());
                 cursor.moveToNext();
             }
 

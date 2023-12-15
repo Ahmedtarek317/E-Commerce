@@ -2,6 +2,8 @@ package com.example.e_commerce.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.CategoryModel;
 import com.example.e_commerce.Model.ProductModel;
+import com.example.e_commerce.Model.ProductModelBuilder;
 import com.example.e_commerce.R;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,6 +45,7 @@ public class UploadProduct extends AppCompatActivity {
     MyDatabase database;
     String str1;
     final static int GALLERY_REQUEST_CODE = 101;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,88 +58,56 @@ public class UploadProduct extends AppCompatActivity {
         addcategory=(Button)findViewById(R.id.addcategory);
         addcateg=(EditText) findViewById(R.id.editcategory);
 
-        reset_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                productimage.setImageResource(R.drawable.proimg);
-                productname.setText("");
-                productprice.setText("");
-                productquantity.setText("");
-            }
+        reset_btn.setOnClickListener(view -> {
+            productimage.setImageResource(R.drawable.proimg);
+            productname.setText("");
+            productprice.setText("");
+            productquantity.setText("");
         });
 
-         addcategory.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                String newcategory= addcateg.getText().toString();
+         addcategory.setOnClickListener(view -> {
+            String newcategory= addcateg.getText().toString();
 
-                 database.insertCategory(new CategoryModel(newcategory),0);
-                 getAllcategory();
-             }
+             database.insertCategory(new CategoryModel(newcategory),0);
+             getAllcategory();
          });
         SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
         str1=preferences.getString("add1","show");
         if(str1.equals("hiddin2")){
             addCategory.setText("");
         }
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!str1.equals("hiddin2")){
-                    addCategory();
-                }
-                SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("add1","hiddin2");
-                editor.apply();
-                addCategory.setText("");
+        addCategory.setOnClickListener(view -> {
+            if(!str1.equals("hiddin2")){
+                addCategory();
             }
+            SharedPreferences preferences1 =getSharedPreferences("addCategory1",MODE_PRIVATE);
+            SharedPreferences.Editor editor= preferences1.edit();
+            editor.putString("add1","hiddin2");
+            editor.apply();
+            addCategory.setText("");
         });
 
         getAllcategory();
 
 
-        productimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                chooseImage();
-            }
-        });
+        productimage.setOnClickListener(v -> chooseImage());
 
-        upload_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadProduct();
-            }
-        });
-        updateproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateProduct();
-            }
-        });
-        daleteproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                deleteproduct();
-            }
-        });
+        upload_btn.setOnClickListener(v -> uploadProduct());
+        updateproduct.setOnClickListener(view -> updateProduct());
+        daleteproduct.setOnClickListener(view -> deleteproduct());
 
-        Generate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            if(idforupdateordalete.getText().toString().replace(" ", "").trim().equals(""))
-                Toast.makeText(getApplicationContext(),"Enter id",Toast.LENGTH_SHORT).show();
-            else{
-                Cursor c= database.getProductbyid(idforupdateordalete.getText().toString());
-                productname.setText(c.getString(1));
-                productprice.setText(c.getFloat(3)+"");
-                productquantity.setText(c.getInt(4)+"");
-                InputStream is = new ByteArrayInputStream(c.getBlob(2));
-                Bitmap bmp = BitmapFactory.decodeStream(is);
-                productimage.setImageBitmap(bmp);//convert byte[] to bit map
-            }
-            }
+        Generate.setOnClickListener(view -> {
+        if(idforupdateordalete.getText().toString().replace(" ", "").trim().equals(""))
+            Toast.makeText(getApplicationContext(),"Enter id",Toast.LENGTH_SHORT).show();
+        else{
+            Cursor c= database.getProductbyid(idforupdateordalete.getText().toString());
+            productname.setText(c.getString(1));
+            productprice.setText(c.getFloat(3)+"");
+            productquantity.setText(c.getInt(4)+"");
+            InputStream is = new ByteArrayInputStream(c.getBlob(2));
+            Bitmap bmp = BitmapFactory.decodeStream(is);
+            productimage.setImageBitmap(bmp);//convert byte[] to bit map
+        }
         });
     }
 
@@ -260,8 +232,14 @@ public class UploadProduct extends AppCompatActivity {
 
         if(!name.equals("")||!price.equals("")||!quan.equals(""))
         {
-            ProductModel productModel = new ProductModel(getApplicationContext(),Integer.parseInt(quan), catid,name,image,Double.parseDouble(price));
-            String sss= database.insertProduct(productModel);
+            ProductModelBuilder productModel = new ProductModelBuilder(context);
+            productModel.setPro_quantity(Integer.parseInt(quan))
+                    .setCatId(catid)
+                    .setProName(name)
+                    .setProImage(image)
+                    .setPrice(Double.parseDouble(price))
+                    .build();
+            String sss= database.insertProduct(productModel.build());
 
             Toast.makeText(this, sss, Toast.LENGTH_SHORT).show();
             productimage.setImageResource(R.drawable.proimg);
@@ -288,8 +266,14 @@ public class UploadProduct extends AppCompatActivity {
 
         if(!name.equals("")||!price.equals("")||!quan.equals(""))
         {
-            ProductModel productModel = new ProductModel(getApplicationContext(),Integer.parseInt(quan), catid,name,image,Double.parseDouble(price));
-            database.updateProduct(productModel,idforupdateordalete.getText().toString());
+            ProductModelBuilder productModel = new ProductModelBuilder(context);
+            productModel.setPro_quantity(Integer.parseInt(quan))
+                    .setCatId(catid)
+                    .setProName(name)
+                    .setProImage(image)
+                    .setPrice(Double.parseDouble(price))
+                    .build();
+            database.updateProduct(productModel.build(),idforupdateordalete.getText().toString());
 
 
 
