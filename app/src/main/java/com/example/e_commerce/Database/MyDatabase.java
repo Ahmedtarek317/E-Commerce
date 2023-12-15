@@ -12,14 +12,21 @@ import com.example.e_commerce.Model.ProductModel;
 import java.util.ArrayList;
 
 public class MyDatabase extends SQLiteOpenHelper {
-
+    //lazy singletone
+    private static MyDatabase instance;
     final static String dataName = "Mydatabase7";
     SQLiteDatabase database;
-
-    public MyDatabase(@Nullable Context context) {
+    private MyDatabase(@Nullable Context context) {
         super(context, dataName, null, 3);
     }
 
+
+    public static synchronized MyDatabase getInstance(Context context) {
+        if (instance == null) {
+            instance = new MyDatabase(context);
+        }
+        return instance;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

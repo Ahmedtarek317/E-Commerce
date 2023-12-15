@@ -73,24 +73,24 @@ public class UploadProduct extends AppCompatActivity {
                  getAllcategory();
              }
          });
-//        SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
-//        str1=preferences.getString("add1","show");
-//        if(str1.equals("hiddin2")){
-//            addCategory.setText("");
-//        }
-//        addCategory.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(!str1.equals("hiddin2")){
-//                    addCategory();
-//                }
-//                SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
-//                SharedPreferences.Editor editor=preferences.edit();
-//                editor.putString("add1","hiddin2");
-//                editor.apply();
-//                addCategory.setText("");
-//            }
-//        });
+        SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
+        str1=preferences.getString("add1","show");
+        if(str1.equals("hiddin2")){
+            addCategory.setText("");
+        }
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!str1.equals("hiddin2")){
+                    addCategory();
+                }
+                SharedPreferences preferences=getSharedPreferences("addCategory1",MODE_PRIVATE);
+                SharedPreferences.Editor editor=preferences.edit();
+                editor.putString("add1","hiddin2");
+                editor.apply();
+                addCategory.setText("");
+            }
+        });
 
         getAllcategory();
 
@@ -160,7 +160,7 @@ public class UploadProduct extends AppCompatActivity {
         reset_btn =(TextView) findViewById(R.id.reset);
         addCategory=(TextView) findViewById(R.id.addCategory);
         Generate=(Button)findViewById(R.id.generate);
-        database = new MyDatabase(this);
+        database =  MyDatabase.getInstance(this);
     }
 
     protected void chooseImage() {

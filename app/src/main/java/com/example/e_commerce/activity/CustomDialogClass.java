@@ -36,7 +36,7 @@ public class CustomDialogClass extends Dialog implements android.view.View.OnCli
         cancelrate.setOnClickListener(this);
         txtrating=(EditText)findViewById(R.id.txtcustrating);
         ratingBar=(RatingBar)findViewById(R.id.ratingBar);
-        rate=new MyDatabase(getContext());
+        rate= MyDatabase.getInstance(getContext());
     }
 
     @Override

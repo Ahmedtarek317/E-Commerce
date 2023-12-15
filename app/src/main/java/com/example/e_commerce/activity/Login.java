@@ -46,7 +46,7 @@ public class Login extends AppCompatActivity {
 
             }
         });
-        obj=new MyDatabase(this);
+        obj= MyDatabase.getInstance(this);
         login=(Button)findViewById(R.id.Login);
         forget_password=(TextView) findViewById(R.id.forget_password);
 

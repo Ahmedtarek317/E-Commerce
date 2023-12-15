@@ -30,7 +30,7 @@ public class ShowRating extends AppCompatActivity {
         rateList=(ListView)findViewById(R.id.rating);
         rateAdapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1);
         rateList.setAdapter(rateAdapter);
-        rate=new MyDatabase(getApplicationContext());
+        rate= MyDatabase.getInstance(getApplicationContext());
         Cursor cursor=rate.get_rating();
         while (!cursor.isAfterLast()){
             rateAdapter.add("rating: "+cursor.getString(0) +"\n"+ cursor.getString(1));

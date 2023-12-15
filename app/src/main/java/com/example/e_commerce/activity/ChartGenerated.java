@@ -51,7 +51,7 @@ public class ChartGenerated extends AppCompatActivity {
         cate3=(TextView)findViewById(R.id.cate3);
         cate4=(TextView)findViewById(R.id.cate4);
 
-        database=new MyDatabase(getApplicationContext());
+        database= MyDatabase.getInstance(getApplicationContext());
         getSupportActionBar().setTitle("Chart Generated");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

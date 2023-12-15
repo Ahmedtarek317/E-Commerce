@@ -29,7 +29,7 @@ public class CartAdapter extends BaseAdapter{
     public CartAdapter(Context context, ArrayList<ProductModel> data) {
         this.data = data;
         this.context = context;
-        db=new MyDatabase(context);
+        db= MyDatabase.getInstance(context);
         getProductsids();
     }
 

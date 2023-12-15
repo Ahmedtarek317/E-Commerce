@@ -95,7 +95,7 @@ public class Home extends Fragment {
             }
         });
 
-        database = new MyDatabase(getActivity());
+        database = MyDatabase.getInstance(getActivity());
 
         getAllcategory();
         getAllProduct();
@@ -117,7 +117,6 @@ public class Home extends Fragment {
                     listView.setAdapter(adabter);
                 }
                 else
-
                 searchByCategory(categories.getSelectedItem().toString());
             }
 

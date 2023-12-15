@@ -43,7 +43,7 @@ public class ProductAdabter extends ArrayAdapter {
         data=objects;
         data_copy=objects;
         sharedPreferences=getContext().getSharedPreferences("cart",Context.MODE_PRIVATE);
-        db=new MyDatabase(getContext());
+        db= MyDatabase.getInstance(getContext());
         getSelectedProducts();
         preferences=getContext().getSharedPreferences("Cname",Context.MODE_PRIVATE);
         loginCustname =preferences.getString("CNAME","");
@@ -54,8 +54,8 @@ public class ProductAdabter extends ArrayAdapter {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        if (convertView==null)
-            convertView= LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
+        if (convertView == null)
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
 
         ImageView product_image = convertView.findViewById(R.id.image_of_product);
         TextView product_name = convertView.findViewById(R.id.name_of_product);
@@ -63,7 +63,7 @@ public class ProductAdabter extends ArrayAdapter {
         ImageButton add_cart = convertView.findViewById(R.id.add_to_cart);
         ImageButton add_quan = convertView.findViewById(R.id.increase_quantity1);
         ImageButton dec_quan = convertView.findViewById(R.id.decrase_quantity1);
-        final TextView item_quan=convertView.findViewById(R.id.quantity);
+        final TextView item_quan = convertView.findViewById(R.id.quantity);
         TextView product_id = convertView.findViewById(R.id.viewid);
 
         if (data.get(position).getProImage() != null) {
@@ -79,97 +79,99 @@ public class ProductAdabter extends ArrayAdapter {
         add_quan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            int quan = Integer.parseInt(item_quan.getText().toString());
-            quan++;
-            item_quan.setText(String.valueOf(quan));
+                int quan = Integer.parseInt(item_quan.getText().toString());
+                quan++;
+                item_quan.setText(String.valueOf(quan));
             }
         });
 
         dec_quan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            int quan = Integer.parseInt(item_quan.getText().toString());
-            if (quan > 0)
-                quan--;
-            item_quan.setText(String.valueOf(quan));
+                int quan = Integer.parseInt(item_quan.getText().toString());
+                if (quan > 0)
+                    quan--;
+                item_quan.setText(String.valueOf(quan));
             }
         });
 
         add_cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            Cursor c= db.getQuantity(data.get(position).getPro_id()+"");
-            if(Integer.parseInt(item_quan.getText().toString())>0 && c.getInt(0)- Integer.valueOf(item_quan.getText().toString())>=0){
-                String str = db.getCateName(data.get(position).getPro_id()+"");
-                String aaa= db.updateProductSelected(Integer.parseInt(item_quan.getText().toString()),data.get(position).getProName());
-                //Toast.makeText(getContext(), aaa, Toast.LENGTH_SHORT).show();
 
-                switch (str){
-                    case "electronics":
-                        int electronics=db.getQuan(1).getInt(0);
-                        Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
-                        electronics+=Integer.valueOf(item_quan.getText().toString());
-                        db.updateCategory(electronics,1);
-                        Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
-                        break;
-                    case "fashion":
-                        int fashion=db.getQuan(2).getInt(0);
-                        fashion+=Integer.valueOf(item_quan.getText().toString());
-                        db.updateCategory(fashion,2);
-                        Toast.makeText(getContext(), "fashion: "+fashion, Toast.LENGTH_SHORT).show();
-                        break;
-                    case "cars":
-                        int cars=db.getQuan(3).getInt(0);
-                        cars+=Integer.valueOf(item_quan.getText().toString());
-                        db.updateCategory(cars,3);
-                        Toast.makeText(getContext(), "cars: "+cars, Toast.LENGTH_SHORT).show();
-                        break;
-                    case "sport":
-                        int sport=db.getQuan(4).getInt(0);
-                        sport+=Integer.valueOf(item_quan.getText().toString());
-                        db.updateCategory(sport,4);
-                        Toast.makeText(getContext(), "sport: "+sport, Toast.LENGTH_SHORT).show();
-                        break;
+                @Override
+                public void onClick(View v) {
+                    Cursor c= db.getQuantity(data.get(position).getPro_id()+"");
+                    if(Integer.parseInt(item_quan.getText().toString())>0 && c.getInt(0)- Integer.valueOf(item_quan.getText().toString())>=0){
+                        String str = db.getCateName(data.get(position).getPro_id()+"");
+                        String aaa= db.updateProductSelected(Integer.parseInt(item_quan.getText().toString()),data.get(position).getProName());
+                        //Toast.makeText(getContext(), aaa, Toast.LENGTH_SHORT).show();
+
+                        switch (str){
+                            case "electronics":
+                                int electronics=db.getQuan(1).getInt(0);
+                                Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
+                                electronics+=Integer.valueOf(item_quan.getText().toString());
+                                db.updateCategory(electronics,1);
+                                Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
+                                break;
+                            case "fashion":
+                                int fashion=db.getQuan(2).getInt(0);
+                                fashion+=Integer.valueOf(item_quan.getText().toString());
+                                db.updateCategory(fashion,2);
+                                Toast.makeText(getContext(), "fashion: "+fashion, Toast.LENGTH_SHORT).show();
+                                break;
+                            case "cars":
+                                int cars=db.getQuan(3).getInt(0);
+                                cars+=Integer.valueOf(item_quan.getText().toString());
+                                db.updateCategory(cars,3);
+                                Toast.makeText(getContext(), "cars: "+cars, Toast.LENGTH_SHORT).show();
+                                break;
+                            case "sport":
+                                int sport=db.getQuan(4).getInt(0);
+                                sport+=Integer.valueOf(item_quan.getText().toString());
+                                db.updateCategory(sport,4);
+                                Toast.makeText(getContext(), "sport: "+sport, Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        selected_items.add(data.get(position).getPro_id());
+                        Gson gson = new Gson();
+                        String json = gson.toJson(selected_items);
+                        editor = sharedPreferences.edit();
+                        editor.putString("lastorder", json);
+                        editor.apply();
+
+                        Toast.makeText(getContext(), "product added", Toast.LENGTH_SHORT).show();
+
+
+                        String uu= db.Insert_transactions(
+                                loginCustname,
+                                data.get(position).getProName(),
+                                db.getCateName(data.get(position).getPro_id()+""),
+                                data.get(position).getProImage(),
+                                Calendar.getInstance().getTime().toString(),
+                                (float) (Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()),
+                                Integer.parseInt(item_quan.getText().toString())
+                        );
+                        //Toast.makeText(getContext(), uu, Toast.LENGTH_SHORT).show();
+
+                        Cursor c1=db.getCost(1);
+                        db.updateCost(1, (float) (c1.getFloat(0)+Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()));
+
+                        quantityitem=Integer.parseInt(item_quan.getText().toString());
+
+                        db.updateQuantity(c.getInt(0)- Integer.valueOf(item_quan.getText().toString()),data.get(position).getPro_id());
+
+                    }
+                    else if(c.getInt(0)- Integer.valueOf(item_quan.getText().toString()) < 0 ){
+                        Toast.makeText(getContext(), "item was finished", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(Integer.parseInt(item_quan.getText().toString())==0){
+                        Toast.makeText(getContext(), "choose quantity", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                selected_items.add(data.get(position).getPro_id());
-                Gson gson = new Gson();
-                String json = gson.toJson(selected_items);
-                editor = sharedPreferences.edit();
-                editor.putString("lastorder", json);
-                editor.apply();
-
-                Toast.makeText(getContext(), "product added", Toast.LENGTH_SHORT).show();
-
-
-                String uu= db.Insert_transactions(
-                        loginCustname,
-                        data.get(position).getProName(),
-                        db.getCateName(data.get(position).getPro_id()+""),
-                        data.get(position).getProImage(),
-                        Calendar.getInstance().getTime().toString(),
-                        (float) (Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()),
-                        Integer.parseInt(item_quan.getText().toString())
-                );
-                //Toast.makeText(getContext(), uu, Toast.LENGTH_SHORT).show();
-
-                Cursor c1=db.getCost(1);
-                db.updateCost(1, (float) (c1.getFloat(0)+Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()));
-
-                quantityitem=Integer.parseInt(item_quan.getText().toString());
-
-                db.updateQuantity(c.getInt(0)- Integer.valueOf(item_quan.getText().toString()),data.get(position).getPro_id());
-
-            }
-            else if(c.getInt(0)- Integer.valueOf(item_quan.getText().toString()) < 0 ){
-                Toast.makeText(getContext(), "item was finished", Toast.LENGTH_SHORT).show();
-            }
-            else if(Integer.parseInt(item_quan.getText().toString())==0){
-                Toast.makeText(getContext(), "choose quantity", Toast.LENGTH_SHORT).show();
-            }
-            }
-        });
+            });
         return convertView;
-    }
+        }
+
 
     public void filter(ArrayList<ProductModel>filterlist){
         data.clear();

@@ -40,7 +40,7 @@ public class SignUp extends AppCompatActivity {
         haveaccount =(TextView) findViewById(R.id.toLogin);
         signup=(Button)findViewById(R.id.signup);
 
-        obj=new MyDatabase(this);
+        obj=MyDatabase.getInstance(this);
 
         final Calendar myCalendar = Calendar.getInstance();
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener()

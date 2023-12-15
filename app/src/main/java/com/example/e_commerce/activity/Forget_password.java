@@ -24,7 +24,7 @@ public class Forget_password extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         getSupportActionBar().setTitle("Forget password");
-        obj1=new MyDatabase(this);
+        obj1= MyDatabase.getInstance(this);
         check=(Button)findViewById(R.id.checkinforget_password);
 
         check.setOnClickListener(new View.OnClickListener() {

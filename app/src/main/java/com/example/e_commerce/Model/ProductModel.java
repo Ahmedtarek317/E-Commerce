@@ -26,7 +26,7 @@ public class ProductModel {
     }
 
     public ProductModel(Context context,int pro_quantity, int catId, String proName, byte [] proImage, double price) {
-        db=new MyDatabase(context);
+        db= MyDatabase.getInstance(context);
         this.pro_quantity = pro_quantity;
         this.catId = catId;
         this.proName = proName;

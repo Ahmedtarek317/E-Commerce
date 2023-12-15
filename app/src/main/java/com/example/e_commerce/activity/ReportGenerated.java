@@ -29,7 +29,7 @@ public class ReportGenerated extends AppCompatActivity {
         reportList=(ListView)findViewById(R.id.report);
         reportAdapter=new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1);
         reportList.setAdapter(reportAdapter);
-        report=new MyDatabase(getApplicationContext());
+        report= MyDatabase.getInstance(getApplicationContext());
         Cursor cursor=report.getTransactions();
         while (!cursor.isAfterLast()){
             reportAdapter.add(
