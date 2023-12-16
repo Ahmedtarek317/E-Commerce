@@ -45,6 +45,11 @@ public class MyDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table transactions (id integer primary key  autoincrement , customername text, productname text , catgoryname text ,image blob ,date TEXT ,price real ,quantity integer) ");
 
         sqLiteDatabase.execSQL("create table cost (id integer primary key  autoincrement , costproducts REAL)");
+        sqLiteDatabase.execSQL("create table creditCard (id integer primary key autoincrement, " + "user_id integer not null, " +
+                "card_number text not null, " +
+                "expire_month integer not null, " +
+                "expire_year integer not null, " +
+                "foreign key (user_id) references user (id))");
     }
 
     @Override
@@ -55,6 +60,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("drop table if exists rating");
         db.execSQL("drop table if exists transactions");
         db.execSQL("drop table if exists cost");
+        db.execSQL("drop table if exists creditCard");
         onCreate(db);
     }
 

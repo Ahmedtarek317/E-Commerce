@@ -27,6 +27,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.payment"
+            android:exported="false" />
         <activity android:name=".activity.EditProfile" />
         <activity android:name=".activity.CustomDialogClass" />
         <activity android:name=".activity.ChartGenerated" />
