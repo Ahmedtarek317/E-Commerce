@@ -200,11 +200,11 @@ public class MyDatabase extends SQLiteOpenHelper {
     public String updateUser(CustomerModel user) {
         database = getWritableDatabase();
         ContentValues row = new ContentValues();
-        row.put("name", user.getUsername());
+        row.put("username", user.getUsername());
         row.put("email", user.getEmail());
         row.put("password", user.getPassword());
         row.put("birthdate", user.getBirthdate());
-        long re =database.update("product",row,"id=?",new String[]{String.valueOf(user.getId())});
+        long re =database.update("customer",row,"id = '" + user.getId() + "'",null);
         database.close();
         if(re==-1)
             return "error";

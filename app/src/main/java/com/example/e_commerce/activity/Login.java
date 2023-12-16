@@ -68,7 +68,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-            ArrayList<CustomerModel> arrayList=obj.Get_Data();
             //Toast.makeText(Login.this,arrayList.size()+" ",Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(Login.this,MainActivity.class);
             Intent toadmin=new Intent(Login.this,UploadProduct.class);
