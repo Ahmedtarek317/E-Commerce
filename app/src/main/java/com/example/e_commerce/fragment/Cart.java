@@ -4,6 +4,7 @@ package com.example.e_commerce.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -29,10 +30,12 @@ import android.widget.Toast;
 
 import com.example.e_commerce.Adapter.CartAdapter;
 import com.example.e_commerce.Database.MyDatabase;
+import com.example.e_commerce.Model.CustomerModel;
 import com.example.e_commerce.Model.ProductModel;
 import com.example.e_commerce.Model.ProductModelBuilder;
 import com.example.e_commerce.R;
 import com.example.e_commerce.activity.CustomDialogClass;
+import com.example.e_commerce.activity.payment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -62,7 +65,8 @@ public class Cart extends Fragment implements LocationListener {
 
 
     TextView orignal_price,delivery_cost,total_cost;
-    Button apply_address,confirm_order;
+
+    Button apply_address,confirm_order,add_payment;
 
     double cost=0;
 
@@ -91,8 +95,11 @@ public class Cart extends Fragment implements LocationListener {
         apply_address=view.findViewById(R.id.apply_address);
         confirm_order=view.findViewById(R.id.confirm_order);
         add_address=view.findViewById(R.id.add_address);
+        add_payment = view.findViewById(R.id.addPayment);
 
         fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(getContext());
+        CustomerModel user = CustomerModel.getInstance();
+        int userId=user.getId();
 
 
         apply_address.setOnClickListener(new View.OnClickListener() {
@@ -111,15 +118,30 @@ public class Cart extends Fragment implements LocationListener {
             }
             }
         });
+        add_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create an Intent to start the PaymentActivity
+                Intent paymentIntent = new Intent(getActivity(), payment.class);
+
+                // Pass any necessary data using Intent extras
+                paymentIntent.putExtra("id", userId);
+
+                // Start the PaymentActivity
+                startActivity(paymentIntent);
+            }
+        });
         confirm_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             if(orignal_price.getText().toString().equalsIgnoreCase("0.0"+" $") || orignal_price.getText().toString().equalsIgnoreCase("000"))
                 Toast.makeText(getContext(),"not confirm",Toast.LENGTH_SHORT).show();
             else{
+
                 Toast.makeText(getContext(),"confirm",Toast.LENGTH_SHORT).show();
                 CustomDialogClass cdd=new CustomDialogClass(getActivity());
                 cdd.show();
+
             }
             }
         });

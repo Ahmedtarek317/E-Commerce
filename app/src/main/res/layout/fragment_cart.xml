@@ -59,13 +59,14 @@
 
             <Button
                 android:id="@+id/apply_address"
+                style="@style/loginButton"
                 android:layout_width="0dp"
+                android:layout_height="@dimen/_31sdp"
                 android:layout_weight="0.4"
-                android:textColor="#fff"
                 android:text="apply"
-                android:textSize="@dimen/_10sdp"
-                android:background="@color/redColorForLoginButton"
-                android:layout_height="@dimen/_31sdp" />
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="@dimen/_10sdp" />
 
         </LinearLayout>
 
@@ -178,18 +179,35 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/addPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        style="@style/loginButton"
+        android:padding="5dp"
+        android:text="Add payment"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_order"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lean2" /> />
 
     <Button
         android:id="@+id/confirm_order"
+        style="@style/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#D0051F"
+        android:layout_marginBottom="4dp"
         android:padding="10dp"
         android:text="Confirm order"
         android:textColor="#fff"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 

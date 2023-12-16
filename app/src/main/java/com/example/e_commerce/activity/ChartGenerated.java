@@ -118,6 +118,10 @@ public class ChartGenerated extends AppCompatActivity {
                 Intent i3 = new Intent(ChartGenerated.this, UploadProduct.class);
                 startActivity(i3);
                 return true;
+            case R.id.deleteuser:
+                Intent i4=new Intent(ChartGenerated.this, deleteUser.class);
+                startActivity(i4);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

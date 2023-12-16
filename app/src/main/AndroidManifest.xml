@@ -27,11 +27,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.payment"
-            android:exported="false" />
-        <activity android:name=".activity.EditProfile" />
-        <activity android:name=".activity.CustomDialogClass" />
+        <activity android:name=".activity.CustomDialogClass"/>
         <activity android:name=".activity.ChartGenerated" />
         <activity android:name=".activity.ReportGenerated" />
         <activity android:name=".activity.UserLocation" />
@@ -53,6 +49,7 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.Forget_password" />
+        <activity android:name=".activity.AdminLogin" />
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.UploadProduct" />
         <activity android:name=".activity.SignUp" />

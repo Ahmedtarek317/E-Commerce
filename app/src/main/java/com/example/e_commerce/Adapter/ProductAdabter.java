@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
 public class ProductAdabter extends ArrayAdapter {
 
@@ -94,44 +95,29 @@ public class ProductAdabter extends ArrayAdapter {
                 item_quan.setText(String.valueOf(quan));
             }
         });
-
         add_cart.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
+                    Map<String, String>categories=db.getCategoryData();
                     Cursor c= db.getQuantity(data.get(position).getPro_id()+"");
+
                     if(Integer.parseInt(item_quan.getText().toString())>0 && c.getInt(0)- Integer.valueOf(item_quan.getText().toString())>=0){
                         String str = db.getCateName(data.get(position).getPro_id()+"");
-                        String aaa= db.updateProductSelected(Integer.parseInt(item_quan.getText().toString()),data.get(position).getProName());
-                        //Toast.makeText(getContext(), aaa, Toast.LENGTH_SHORT).show();
 
-                        switch (str){
-                            case "electronics":
-                                int electronics=db.getQuan(1).getInt(0);
-                                Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
-                                electronics+=Integer.valueOf(item_quan.getText().toString());
-                                db.updateCategory(electronics,1);
-                                Toast.makeText(getContext(), "electronics: "+electronics, Toast.LENGTH_SHORT).show();
-                                break;
-                            case "fashion":
-                                int fashion=db.getQuan(2).getInt(0);
-                                fashion+=Integer.valueOf(item_quan.getText().toString());
-                                db.updateCategory(fashion,2);
-                                Toast.makeText(getContext(), "fashion: "+fashion, Toast.LENGTH_SHORT).show();
-                                break;
-                            case "cars":
-                                int cars=db.getQuan(3).getInt(0);
-                                cars+=Integer.valueOf(item_quan.getText().toString());
-                                db.updateCategory(cars,3);
-                                Toast.makeText(getContext(), "cars: "+cars, Toast.LENGTH_SHORT).show();
-                                break;
-                            case "sport":
-                                int sport=db.getQuan(4).getInt(0);
-                                sport+=Integer.valueOf(item_quan.getText().toString());
-                                db.updateCategory(sport,4);
-                                Toast.makeText(getContext(), "sport: "+sport, Toast.LENGTH_SHORT).show();
-                                break;
+                      for( Map.Entry<String,String>iterate:categories.entrySet())
+                      {
+                        if(iterate.getKey()==str){
+                            int x= Integer.parseInt(iterate.getValue());
+                            int categ=db.getQuan(x).getInt(0);
+                            Toast.makeText(getContext(), iterate.getKey()+":"+categ, Toast.LENGTH_SHORT).show();
+                            categ+=Integer.valueOf(item_quan.getText().toString());
+                            db.updateCategory(categ,x);
+                            Toast.makeText(getContext(), iterate.getKey()+":"+categ, Toast.LENGTH_SHORT).show();
+                            break;
                         }
+
+                      }
+
                         selected_items.add(data.get(position).getPro_id());
                         Gson gson = new Gson();
                         String json = gson.toJson(selected_items);
@@ -151,7 +137,6 @@ public class ProductAdabter extends ArrayAdapter {
                                 (float) (Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()),
                                 Integer.parseInt(item_quan.getText().toString())
                         );
-                        //Toast.makeText(getContext(), uu, Toast.LENGTH_SHORT).show();
 
                         Cursor c1=db.getCost(1);
                         db.updateCost(1, (float) (c1.getFloat(0)+Integer.parseInt(item_quan.getText().toString())*data.get(position).getPrice()));
@@ -168,8 +153,8 @@ public class ProductAdabter extends ArrayAdapter {
                         Toast.makeText(getContext(), "choose quantity", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
-        return convertView;
+        });
+             return convertView;
         }
 
 

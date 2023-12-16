@@ -68,6 +68,10 @@ public class ReportGenerated extends AppCompatActivity {
                 Intent i3 = new Intent(ReportGenerated.this, ChartGenerated.class);
                 startActivity(i3);
                 return true;
+            case R.id.deleteuser:
+                Intent i4=new Intent(ReportGenerated.this, deleteUser.class);
+                startActivity(i4);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -61,6 +61,10 @@ public class ShowRating extends AppCompatActivity {
                 Intent i3 = new Intent(ShowRating.this, ChartGenerated.class);
                 startActivity(i3);
                 return true;
+            case R.id.deleteuser:
+                Intent i4=new Intent(ShowRating.this, deleteUser.class);
+                startActivity(i4);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

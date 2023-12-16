@@ -79,24 +79,13 @@ public class SignUp extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // Display Selected date in textbox
-
-                                if (year < cyear)
-                                    view.updateDate(cyear,cmonth,cday);
-
-                                if (monthOfYear < cmonth && year == cyear)
-                                    view.updateDate(cyear,cmonth,cday);
-
-                                if (dayOfMonth < cday && year == cyear && monthOfYear == cmonth)
-                                    view.updateDate(cyear,cmonth,cday);
-
                                 birthdate=String.valueOf(dayOfMonth)+"-"+String.valueOf(monthOfYear)+"-"+String.valueOf(year);
                                 calendarView.setText(dayOfMonth + "-"
                                         + (monthOfYear + 1) + "-" + year);
 
                             }
                         }, cyear, cmonth, cday);
-                dpd.getDatePicker().setMinDate(System.currentTimeMillis());
-                dpd.show();
+                           dpd.show();
 
             }
         });

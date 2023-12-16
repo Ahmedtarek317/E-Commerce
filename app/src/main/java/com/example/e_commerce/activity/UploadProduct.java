@@ -40,7 +40,7 @@ public class UploadProduct extends AppCompatActivity {
     EditText productname, productprice, productquantity,idforupdateordalete,addcateg;
     Spinner proCategory;
     ArrayAdapter adapter;
-    Button upload_btn,updateproduct,daleteproduct,Generate,addcategory;
+    Button upload_btn,updateproduct,daleteproduct,Generate,addcategory,deletecategory,addsale;
     TextView reset_btn,addCategory;
     MyDatabase database;
     String str1;
@@ -57,7 +57,20 @@ public class UploadProduct extends AppCompatActivity {
         intiView();
         addcategory=(Button)findViewById(R.id.addcategory);
         addcateg=(EditText) findViewById(R.id.editcategory);
-
+        deletecategory=(Button) findViewById(R.id.DeleteCategory);
+        addsale=(Button)findViewById(R.id.sale);
+        addsale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addsale();
+            }
+        });
+        deletecategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deletecategory();
+            }
+        });
         reset_btn.setOnClickListener(view -> {
             productimage.setImageResource(R.drawable.proimg);
             productname.setText("");
@@ -76,6 +89,7 @@ public class UploadProduct extends AppCompatActivity {
         if(str1.equals("hiddin2")){
             addCategory.setText("");
         }
+
         addCategory.setOnClickListener(view -> {
             if(!str1.equals("hiddin2")){
                 addCategory();
@@ -92,7 +106,14 @@ public class UploadProduct extends AppCompatActivity {
 
         productimage.setOnClickListener(v -> chooseImage());
 
-        upload_btn.setOnClickListener(v -> uploadProduct());
+        upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               uploadProduct();
+
+            }
+        });
         updateproduct.setOnClickListener(view -> updateProduct());
         daleteproduct.setOnClickListener(view -> deleteproduct());
 
@@ -167,6 +188,9 @@ public class UploadProduct extends AppCompatActivity {
                 Intent i3 = new Intent(UploadProduct.this, ChartGenerated.class);
                 startActivity(i3);
                 return true;
+            case R.id.deleteuser:
+                 Intent i4=new Intent(UploadProduct.this, deleteUser.class);
+                 startActivity(i4);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -286,5 +310,22 @@ public class UploadProduct extends AppCompatActivity {
     public void deleteproduct(){
         String se= database.daleteProduct(idforupdateordalete.getText().toString());
         Toast.makeText(this, se, Toast.LENGTH_SHORT).show();
+    }
+    
+    public void deletecategory(){
+        if(idforupdateordalete.getText().toString().equals("")){
+            Toast.makeText(context, "enter id to delete", Toast.LENGTH_SHORT).show();
+        }
+        else{
+        String se= database.deleteCategory(idforupdateordalete.getText().toString());
+        Toast.makeText(this, se, Toast.LENGTH_SHORT).show();
+    }}
+    public void addsale(){
+
+        String  s =  productprice.getText().toString();
+        double salle = Double.parseDouble(s) * 0.8 ;
+        productprice.setText(String.valueOf(salle));
+        Toast.makeText(this, "sale added", Toast.LENGTH_SHORT).show();
+
     }
 }

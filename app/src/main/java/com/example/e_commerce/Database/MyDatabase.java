@@ -12,9 +12,11 @@ import com.example.e_commerce.Model.ProductModel;
 import com.example.e_commerce.Model.ProductModelBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyDatabase extends SQLiteOpenHelper {
-    //lazy singletone
+    //lazy singleton
     private static MyDatabase instance;
     final static String dataName = "Mydatabase7";
     SQLiteDatabase database;
@@ -45,6 +47,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table transactions (id integer primary key  autoincrement , customername text, productname text , catgoryname text ,image blob ,date TEXT ,price real ,quantity integer) ");
 
         sqLiteDatabase.execSQL("create table cost (id integer primary key  autoincrement , costproducts REAL)");
+
         sqLiteDatabase.execSQL("create table creditCard (id integer primary key autoincrement, " + "user_id integer not null, " +
                 "card_number text not null, " +
                 "expire_month integer not null, " +
@@ -160,10 +163,34 @@ public class MyDatabase extends SQLiteOpenHelper {
         return arrayList;
     }
 
-    public void daletecust(String id){
+    public Map<String, String> getCategoryData() {
+        Map<String, String> dataMap = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT name, id FROM category";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String column1 = cursor.getString(cursor.getColumnIndex("name"));
+                String column2 = cursor.getString(cursor.getColumnIndex("id"));
+                dataMap.put(column1, column2);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return dataMap;
+    }
+
+    public String daletecust(String id){
         SQLiteDatabase sq=this.getWritableDatabase();
-        sq.delete("customer","id=?",new String[]{id});
+        long re= sq.delete("customer","id=?",new String[]{id});
         sq.close();
+        if(re==-1)
+            return "error";
+        else
+            return "customer deleted";
     }
 
     public String  insertProduct(ProductModel product){
@@ -178,9 +205,9 @@ public class MyDatabase extends SQLiteOpenHelper {
         long re=database.insert("product",null,values);
         database.close();
         if(re==-1)
-            return "error quantitySelected";
+            return "error ";
         else
-            return "inserted quantitySelected";
+            return "inserted product";
     }
 
     public String updateProductSelected(int quantitySelected,String prodName){
@@ -386,5 +413,25 @@ public class MyDatabase extends SQLiteOpenHelper {
         database.close();
         cursor.close();
         return null;
+    }
+    public boolean checkuserexist(String id ){
+       database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("select * FROM customer  WHERE   id =?", new String[] {id});
+
+        if(cursor.moveToFirst()){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public String deleteCategory(String c_id){
+        SQLiteDatabase sq=this.getWritableDatabase();
+        long re=sq.delete("category","id=?",new String[]{c_id});
+        sq.close();
+        if(re==-1)
+            return "error";
+        else
+            return "category deleted";
     }
 }
