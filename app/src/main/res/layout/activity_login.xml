@@ -63,7 +63,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/usernameinlogin"
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
@@ -179,6 +178,6 @@
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/go_to_register_page"
         android:minWidth="48dp"
-android:onClick="onLoginClick1"
+        android:onClick="onLoginClick1"
         android:src="@drawable/ic_add_img" />
 </RelativeLayout>

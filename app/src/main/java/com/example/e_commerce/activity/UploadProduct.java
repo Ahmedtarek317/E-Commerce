@@ -275,8 +275,6 @@ public class UploadProduct extends AppCompatActivity {
                     .build();
             database.updateProduct(productModel.build(),idforupdateordalete.getText().toString());
 
-
-
             Toast.makeText(this, "product updated", Toast.LENGTH_SHORT).show();
         }
         else

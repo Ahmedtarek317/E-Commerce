@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.e_commerce.fragment.Cart;
 import com.example.e_commerce.fragment.Home;
-import com.example.e_commerce.fragment.Search;
+import com.example.e_commerce.fragment.Profile;
 
 // Factory interface for creating fragments
 interface FragmentFactory {
@@ -22,10 +22,10 @@ class HomeFactory implements FragmentFactory {
     }
 }
 
-class SearchFactory implements FragmentFactory {
+class ProfileFactory implements FragmentFactory {
     @Override
     public Fragment createFragment() {
-        return new Search();
+        return new Profile();
     }
 }
 
@@ -39,7 +39,7 @@ class CartFactory implements FragmentFactory {
 public class FragmentAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"Home", "Search", "My Cart"};
+    private String tabTitles[] = new String[]{"Home", "Profile", "My Cart"};
     private Context context;
     private FragmentFactory[] fragmentFactories;
 
@@ -50,7 +50,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
         // Initialize fragment factories
         fragmentFactories = new FragmentFactory[]{
                 new HomeFactory(),
-                new SearchFactory(),
+                new ProfileFactory(),
                 new CartFactory()
         };
     }

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.e_commerce.Adapter.FragmentAdapter;
 import com.example.e_commerce.R;
+import com.example.e_commerce.fragment.Profile;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,18 +57,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.logout:
-                editor=sharedPreferences.edit();
-                editor.putString("rememberme","false");
+                editor = sharedPreferences.edit();
+                editor.putString("rememberme", "false");
                 editor.apply();
-                Intent intent = new Intent(MainActivity.this, Splash.class);
-                startActivity(intent);
+                Intent i1 = new Intent(MainActivity.this, Splash.class);
+                startActivity(i1);
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

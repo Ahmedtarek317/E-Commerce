@@ -115,12 +115,23 @@ public class MyDatabase extends SQLiteOpenHelper {
     }
 
     public Cursor get_rating(){
-        SQLiteDatabase s=this.getReadableDatabase();
+        database=this.getReadableDatabase();
         String[] rateDetails={"ratenum","nametxt","id"};
-        Cursor cursor=s.query("rating",rateDetails,null,null,null,null,null);
+        Cursor cursor=database.query("rating",rateDetails,null,null,null,null,null);
         if(cursor!=null)
             cursor.moveToFirst();
-        s.close();
+        database.close();
+        return cursor;
+    }
+    public Cursor user_login(String username, String pass) {
+        database = this.getReadableDatabase();
+        String[] args = {username, pass};
+        Cursor cursor = database.rawQuery("select * from customer where username =? and  password =? ", args);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        database.close();
         return cursor;
     }
 
@@ -185,6 +196,20 @@ public class MyDatabase extends SQLiteOpenHelper {
         cursor.moveToFirst();
         database.close();
         return cursor.getInt(0);
+    }
+    public String updateUser(CustomerModel user) {
+        database = getWritableDatabase();
+        ContentValues row = new ContentValues();
+        row.put("name", user.getUsername());
+        row.put("email", user.getEmail());
+        row.put("password", user.getPassword());
+        row.put("birthdate", user.getBirthdate());
+        long re =database.update("product",row,"id=?",new String[]{String.valueOf(user.getId())});
+        database.close();
+        if(re==-1)
+            return "error";
+        else
+            return "updated";
     }
 
     public void updateProduct(ProductModel product,String p_id){
