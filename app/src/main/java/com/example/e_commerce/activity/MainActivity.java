@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.example.e_commerce.Adapter.FragmentAdapter;
 import com.example.e_commerce.R;
-import com.example.e_commerce.fragment.Profile;
+
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {

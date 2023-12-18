@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.CategoryModel;
 import com.example.e_commerce.Model.ProductModel;
-import com.example.e_commerce.Model.ProductModelBuilder;
+
 import com.example.e_commerce.R;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +40,7 @@ public class UploadProduct extends AppCompatActivity {
     EditText productname, productprice, productquantity,idforupdateordalete,addcateg;
     Spinner proCategory;
     ArrayAdapter adapter;
-    Button upload_btn,updateproduct,daleteproduct,Generate,addcategory,deletecategory,addsale;
+    Button upload_btn,updateproduct,daleteproduct,Generate,addcategory,deletecategory;
     TextView reset_btn,addCategory;
     MyDatabase database;
     String str1;
@@ -58,13 +58,7 @@ public class UploadProduct extends AppCompatActivity {
         addcategory=(Button)findViewById(R.id.addcategory);
         addcateg=(EditText) findViewById(R.id.editcategory);
         deletecategory=(Button) findViewById(R.id.DeleteCategory);
-        addsale=(Button)findViewById(R.id.sale);
-        addsale.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addsale();
-            }
-        });
+
         deletecategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -256,14 +250,8 @@ public class UploadProduct extends AppCompatActivity {
 
         if(!name.equals("")||!price.equals("")||!quan.equals(""))
         {
-            ProductModelBuilder productModel = new ProductModelBuilder(context);
-            productModel.setPro_quantity(Integer.parseInt(quan))
-                    .setCatId(catid)
-                    .setProName(name)
-                    .setProImage(image)
-                    .setPrice(Double.parseDouble(price))
-                    .build();
-            String sss= database.insertProduct(productModel.build());
+            ProductModel productModel = new ProductModel(getApplicationContext(),Integer.parseInt(quan), catid,name,image,Double.parseDouble(price));
+            String sss= database.insertProduct(productModel);
 
             Toast.makeText(this, sss, Toast.LENGTH_SHORT).show();
             productimage.setImageResource(R.drawable.proimg);
@@ -275,7 +263,7 @@ public class UploadProduct extends AppCompatActivity {
             Toast.makeText(this, "product added", Toast.LENGTH_SHORT).show();
         }
         else {
-             Toast.makeText(this, "Check data again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Check data again", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -290,14 +278,10 @@ public class UploadProduct extends AppCompatActivity {
 
         if(!name.equals("")||!price.equals("")||!quan.equals(""))
         {
-            ProductModelBuilder productModel = new ProductModelBuilder(context);
-            productModel.setPro_quantity(Integer.parseInt(quan))
-                    .setCatId(catid)
-                    .setProName(name)
-                    .setProImage(image)
-                    .setPrice(Double.parseDouble(price))
-                    .build();
-            database.updateProduct(productModel.build(),idforupdateordalete.getText().toString());
+            ProductModel productModel = new ProductModel(getApplicationContext(),Integer.parseInt(quan), catid,name,image,Double.parseDouble(price));
+            database.updateProduct(productModel,idforupdateordalete.getText().toString());
+
+
 
             Toast.makeText(this, "product updated", Toast.LENGTH_SHORT).show();
         }
@@ -320,12 +304,5 @@ public class UploadProduct extends AppCompatActivity {
         String se= database.deleteCategory(idforupdateordalete.getText().toString());
         Toast.makeText(this, se, Toast.LENGTH_SHORT).show();
     }}
-    public void addsale(){
 
-        String  s =  productprice.getText().toString();
-        double salle = Double.parseDouble(s) * 0.8 ;
-        productprice.setText(String.valueOf(salle));
-        Toast.makeText(this, "sale added", Toast.LENGTH_SHORT).show();
-
-    }
 }

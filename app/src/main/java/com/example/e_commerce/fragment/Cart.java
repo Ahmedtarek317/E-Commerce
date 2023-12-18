@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Adapter.CartAdapter;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.ProductModel;
-import com.example.e_commerce.Model.ProductModelBuilder;
+
 import com.example.e_commerce.R;
 import com.example.e_commerce.activity.CustomDialogClass;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -82,7 +82,7 @@ public class Cart extends Fragment implements LocationListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cart, container, false);
 
-       // viewproduct=new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1);
+        // viewproduct=new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1);
         cart_products = view.findViewById(R.id.cart_product);
         database =  MyDatabase.getInstance(getContext());
         orignal_price=view.findViewById(R.id.order_price);
@@ -98,29 +98,29 @@ public class Cart extends Fragment implements LocationListener {
         apply_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            //Toast.makeText(getContext(),"address",Toast.LENGTH_SHORT).show();
-            //Intent google_map=new Intent(Intent.ACTION_VIEW);
-            //google_map.setData(Uri.parse("geo:30.1123143,31.3350959?z=15"));
-            //startActivity(google_map);
-            //Intent intent=new Intent(getContext(), UserLocation.class);
-            //startActivity(intent);
-            getLastLocation();
-            if(addr!=null){
-                Toast.makeText(getContext(), addr, Toast.LENGTH_SHORT).show();
-                add_address.setText(addr);
-            }
+                //Toast.makeText(getContext(),"address",Toast.LENGTH_SHORT).show();
+                //Intent google_map=new Intent(Intent.ACTION_VIEW);
+                //google_map.setData(Uri.parse("geo:30.1123143,31.3350959?z=15"));
+                //startActivity(google_map);
+                //Intent intent=new Intent(getContext(), UserLocation.class);
+                //startActivity(intent);
+                getLastLocation();
+                if(addr!=null){
+                    Toast.makeText(getContext(), addr, Toast.LENGTH_SHORT).show();
+                    add_address.setText(addr);
+                }
             }
         });
         confirm_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(orignal_price.getText().toString().equalsIgnoreCase("0.0"+" $") || orignal_price.getText().toString().equalsIgnoreCase("000"))
-                Toast.makeText(getContext(),"not confirm",Toast.LENGTH_SHORT).show();
-            else{
-                Toast.makeText(getContext(),"confirm",Toast.LENGTH_SHORT).show();
-                CustomDialogClass cdd=new CustomDialogClass(getActivity());
-                cdd.show();
-            }
+                if(orignal_price.getText().toString().equalsIgnoreCase("0.0"+" $") || orignal_price.getText().toString().equalsIgnoreCase("000"))
+                    Toast.makeText(getContext(),"not confirm",Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(getContext(),"confirm",Toast.LENGTH_SHORT).show();
+                    CustomDialogClass cdd=new CustomDialogClass(getActivity());
+                    cdd.show();
+                }
             }
         });
 
@@ -133,20 +133,20 @@ public class Cart extends Fragment implements LocationListener {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
 
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                if (location !=null){
-                    Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
-                    List<Address> addresses= null;
-                    try {
-                        addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
-                        addr=addresses.get(0).getAddressLine(0)+", "+addresses.get(0).getLocality()+", "+addresses.get(0).getCountryName();
+                @Override
+                public void onSuccess(Location location) {
+                    if (location !=null){
+                        Geocoder geocoder=new Geocoder(getContext(), Locale.getDefault());
+                        List<Address> addresses= null;
+                        try {
+                            addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                            addr=addresses.get(0).getAddressLine(0)+", "+addresses.get(0).getLocality()+", "+addresses.get(0).getCountryName();
+                        }
+                        catch (IOException e) {
+                            Toast.makeText(getContext(), "IOException", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
                     }
-                    catch (IOException e) {
-                        Toast.makeText(getContext(), "IOException", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                }
                 }
             });
         }else {
@@ -188,16 +188,13 @@ public class Cart extends Fragment implements LocationListener {
         for (int i = 0; i < ids.size(); i++) {
             Cursor cursor = database.getProductbyId(String.valueOf(ids.get(i)));
             if (cursor != null) {
-                ProductModelBuilder productModel = new ProductModelBuilder(context);
-                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
-                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
-                        .setProName(cursor.getString(1))
-                        .setProImage(cursor.getBlob(2))
-                        .setPrice(Double.parseDouble(cursor.getString(3)))
-                        .build();
-                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
-                data.add(productModel.build());
-                cost+=Double.parseDouble((cursor.getString(3)));
+                ProductModel productModel = new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
+                        Integer.parseInt(cursor.getString(5)),
+                        cursor.getString(1), cursor.getBlob(2),
+                        Double.parseDouble(cursor.getString(3)));
+                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
+                data.add(productModel);
+                cost+=Double.parseDouble(cursor.getString(3));
             }
         }
     }

@@ -7,59 +7,40 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.e_commerce.fragment.Cart;
 import com.example.e_commerce.fragment.Home;
-import com.example.e_commerce.fragment.Profile;
-
-// Factory interface for creating fragments
-interface FragmentFactory {
-    Fragment createFragment();
-}
-
-// Concrete implementations of the factory interface
-class HomeFactory implements FragmentFactory {
-    @Override
-    public Fragment createFragment() {
-        return new Home();
-    }
-}
-
-class ProfileFactory implements FragmentFactory {
-    @Override
-    public Fragment createFragment() {
-        return new Profile();
-    }
-}
-
-class CartFactory implements FragmentFactory {
-    @Override
-    public Fragment createFragment() {
-        return new Cart();
-    }
-}
+import com.example.e_commerce.fragment.Search;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"Home", "Profile", "My Cart"};
+    private String tabTitles[] = new String[] { "Home",  "Search","My Cart" };
     private Context context;
-    private FragmentFactory[] fragmentFactories;
 
-    public FragmentAdapter(FragmentManager fm, Context context) {
+
+
+    public FragmentAdapter(FragmentManager fm , Context context) {
         super(fm);
-        this.context = context;
+        this.context=context;
 
-        // Initialize fragment factories
-        fragmentFactories = new FragmentFactory[]{
-                new HomeFactory(),
-                new ProfileFactory(),
-                new CartFactory()
-        };
     }
 
     @Override
     public Fragment getItem(int position) {
-        // Use the factory to create fragments
-        return fragmentFactories[position].createFragment();
+
+        Fragment fragment = null;
+        switch (position) {
+            case 0:
+                fragment = new Home();
+                break;
+            case 1:
+                fragment = new Search();
+                break;
+            case 2:
+                fragment = new Cart();
+                break;
+        }
+        return fragment;
     }
+
 
     @Nullable
     @Override

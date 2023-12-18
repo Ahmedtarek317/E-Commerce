@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
     MyDatabase obj;
-    EditText eusername,epassword;
+    EditText username,password;
     TextView error,forget_password,reg;
     boolean flag=true;
     Button login;
@@ -68,66 +67,65 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-            //Toast.makeText(Login.this,arrayList.size()+" ",Toast.LENGTH_SHORT).show();
-            Intent intent=new Intent(Login.this,MainActivity.class);
-            Intent toadmin=new Intent(Login.this,UploadProduct.class);
-            eusername =(EditText)findViewById(R.id.usernameinlogin);
-            epassword=(EditText)findViewById(R.id.passwordinlogin);
-            error=(TextView)findViewById(R.id.error);
-            eusername.setOnClickListener(new View.OnClickListener() {
+                ArrayList<CustomerModel> arrayList=obj.Get_Data();
+                //Toast.makeText(Login.this,arrayList.size()+" ",Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(Login.this,MainActivity.class);
+                Intent toadmin=new Intent(Login.this,UploadProduct.class);
+                username =(EditText)findViewById(R.id.usernameinlogin);
+                password=(EditText)findViewById(R.id.passwordinlogin);
+                error=(TextView)findViewById(R.id.error);
+                username.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View view) {
-                    error.setText("");
+                    @Override
+                    public void onClick(View view) {
+                        error.setText("");
+                    }
+                });
+                password.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        error.setText("");
+                    }
+                });
+                if(username.getText().toString().equals("admin")&&password.getText().toString().equals("admin"))
+                {
+                    startActivity(toadmin);
                 }
-            });
-            epassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    error.setText("");
-                }
-            });
-             if(eusername.getText().toString().equals("admin")&&epassword.getText().toString().equals("admin"))
-             {
-              startActivity(toadmin);
-             }
-             else{
-            if(eusername.getText().toString().equals("")){
-                error.setText("Enter User Name");
-            } else {
-                String username = eusername.getText().toString();
-                String password = epassword.getText().toString();
+                else{
+                    if(username.getText().toString().equals("")){
+                        error.setText("Enter User Name");
+                    }
 
-                Cursor cursor = obj.user_login(username, password);
-                if(cursor.getCount() > 0){
-                        flag=false;
-                            CustomerModel user = CustomerModel.getInstance();
-                            user.setId(cursor.getInt(0));
-                            user.setUsername(cursor.getString(1));
-                            user.setEmail(cursor.getString(2));
-                            user.setPassword(cursor.getString(3));
-                            user.setBirthdate(cursor.getString(4));
-
-                            SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
-                            SharedPreferences.Editor myEdit = sharedPreferences.edit();
-                            myEdit.putInt("id", cursor.getInt(0));
-                            myEdit.putString("name", cursor.getString(1));
-                            myEdit.putString("email", cursor.getString(2));
-                            myEdit.putString("password", cursor.getString(3));
-                            myEdit.putString("birthdate", cursor.getString(4));
-                            myEdit.apply();
-
-                            setResult(Activity.RESULT_OK,intent);
-                            startActivity(intent);
-                            finish();
+                    else {
+                        for(int i=0;i<arrayList.size();i++){
+                            flag=true;
+                            if(arrayList.get(i).getUsername().equals(username.getText().toString().replace(" ", "").trim()) ){
+                                flag=false;
+                                if(arrayList.get(i).getPassword().equals(password.getText().toString().replace(" ", "").trim())){
+                                    intent.putExtra("username",username.getText().toString().replace(" ", "").trim());
+                                    //u_name=username.getText().toString();
+                                    SharedPreferences prefer1=getSharedPreferences("Cname",MODE_PRIVATE);
+                                    SharedPreferences.Editor editor=prefer1.edit();
+                                    editor.putString("CNAME",username.getText().toString().replace(" ", "").trim());
+                                    editor.apply();
+                                    intent.putExtra("password",password.getText().toString().replace(" ", "").trim());
+                                    setResult(Activity.RESULT_OK,intent);
+                                    startActivity(intent);
+                                    finish();
+                                    break;
+                                }
+                                else{
+                                    error.setText("wrong password");
+                                    break;
+                                }
+                            }
+                        }
+                        if(flag){
+                            error.setText("user not exist");
+                            flag=false;
                         }
                     }
-                if(flag){
-                    error.setText("user not exist");
-                    flag=false;
-                }
-            }
-            }
+                }}
         });
         forget_password.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,19 +140,19 @@ public class Login extends AppCompatActivity {
         rememberme.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            if(compoundButton.isChecked()){
-                SharedPreferences preferences=getSharedPreferences("checkbox",MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("rememberme","true");
-                editor.apply();
-                //Toast.makeText(Login.this,"Checked",Toast.LENGTH_SHORT).show();
+                if(compoundButton.isChecked()){
+                    SharedPreferences preferences=getSharedPreferences("checkbox",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("rememberme","true");
+                    editor.apply();
+                    //Toast.makeText(Login.this,"Checked",Toast.LENGTH_SHORT).show();
                 }
-            else if(!compoundButton.isChecked()){
-                SharedPreferences preferences=getSharedPreferences("checkbox",MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("rememberme","false");
-                editor.apply();
-                //Toast.makeText(Login.this,"UnChecked",Toast.LENGTH_SHORT).show();
+                else if(!compoundButton.isChecked()){
+                    SharedPreferences preferences=getSharedPreferences("checkbox",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    editor.putString("rememberme","false");
+                    editor.apply();
+                    //Toast.makeText(Login.this,"UnChecked",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -166,14 +164,13 @@ public class Login extends AppCompatActivity {
         value = getIntent().getStringExtra("key");
         value2 = getIntent().getStringExtra("key2");
         if (value != null && value2 != null) {
-            eusername =(EditText)findViewById(R.id.usernameinlogin);
-            eusername.setText(value);
-            epassword=(EditText)findViewById(R.id.passwordinlogin);
-            epassword.setText(value2);
+            username =(EditText)findViewById(R.id.usernameinlogin);
+            username.setText(value);
+            password=(EditText)findViewById(R.id.passwordinlogin);
+            password.setText(value2);
         }
     }
     public void onLoginClick1(View view) {
         startActivity(new Intent(this,SignUp.class));
         overridePendingTransition(R.anim.slide_in_right,R.anim.stay);
-    }
-}
+    }}

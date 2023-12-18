@@ -2,7 +2,7 @@ package com.example.e_commerce.Model;
 
 import java.util.Date;
 
-public class CustomerModel implements Cloneable {
+public class CustomerModel {
 
     private int id;
     private String username,email,password,birthdate;
@@ -14,15 +14,7 @@ public class CustomerModel implements Cloneable {
         this.password = password;
         this.birthdate=birthdate;
     }
-    private static CustomerModel user = null;
 
-    public CustomerModel() {}
-
-    public static CustomerModel getInstance(){
-        if(user == null)
-            user = new CustomerModel();
-        return user;
-    }
     public int getId() {
         return id;
     }
@@ -61,12 +53,5 @@ public class CustomerModel implements Cloneable {
 
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
-    }
-    public CustomerModel clone() {
-        try {
-            return (CustomerModel) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 }

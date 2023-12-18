@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.example.e_commerce.Adapter.ProductAdabter;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.ProductModel;
-import com.example.e_commerce.Model.ProductModelBuilder;
+
 import com.example.e_commerce.R;
 import com.example.e_commerce.activity.ScanCodeActivity;
 
@@ -181,15 +181,12 @@ public class Home extends Fragment {
         products.clear();
         if (cursor != null) {
             while (!cursor.isAfterLast()) {
-                ProductModelBuilder productModel = new ProductModelBuilder(context);
-                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
-                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
-                        .setProName(cursor.getString(1))
-                        .setProImage(cursor.getBlob(2))
-                        .setPrice(Double.parseDouble(cursor.getString(3)))
-                        .build();
-                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
-                products.add(productModel.build());
+                ProductModel productModel=new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
+                        Integer.parseInt(cursor.getString(5)),
+                        cursor.getString(1), cursor.getBlob(2),
+                        Double.parseDouble(cursor.getString(3)));
+                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
+                products.add(productModel);
                 cursor.moveToNext();
             }
         }
@@ -218,20 +215,19 @@ public class Home extends Fragment {
         Cursor cursor = database.getProductbyCategor(cat_id);
         if (cursor != null) {
             while (!cursor.isAfterLast()) {
-                ProductModelBuilder productModel = new ProductModelBuilder(context);
-                productModel.setPro_quantity(Integer.parseInt(cursor.getString(4)))
-                        .setQuantitySelected(Integer.parseInt(cursor.getString(5)))
-                        .setProName(cursor.getString(1))
-                        .setProImage(cursor.getBlob(2))
-                        .setPrice(Double.parseDouble(cursor.getString(3)))
-                        .build();
-                productModel.setPro_id(Integer.parseInt((cursor.getString(0))));
-                filterlist.add(productModel.build());
+
+                ProductModel productModel=new ProductModel(getContext(),Integer.parseInt(cursor.getString(4)),
+                        Integer.parseInt(cursor.getString(5)),
+                        cursor.getString(1), cursor.getBlob(2),
+                        Double.parseDouble(cursor.getString(3)));
+                productModel.setPro_id(Integer.parseInt(cursor.getString(0)));
+                filterlist.add(productModel);
+
                 cursor.moveToNext();
             }
 
 
-               adabter.filter(filterlist);
+            adabter.filter(filterlist);
 
             if (filterlist.size()==0)
                 Toast.makeText(getActivity(), "No products to show", Toast.LENGTH_SHORT).show();

@@ -21,15 +21,15 @@ import java.util.ArrayList;
 
 public class ChartGenerated extends AppCompatActivity {
 
-    TextView cate1,cate2,cate3,cate4;
+
     MyDatabase database;
     String[] axisData ={"","","",""};
     int[] yAxisData = {0, 0, 0, 0};
     int iter=0;
 
     // variable for our bar chart
+    TextView mostSelled;
     BarChart barChart;
-
     // variable for our bar data.
     BarData barData;
 
@@ -42,20 +42,18 @@ public class ChartGenerated extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart_generated);
-        barChart = findViewById(R.id.fragment_verticalbarchart_chart);
 
-        cate1=(TextView)findViewById(R.id.cate1);
-        cate2=(TextView)findViewById(R.id.cate2);
-        cate3=(TextView)findViewById(R.id.cate3);
-        cate4=(TextView)findViewById(R.id.cate4);
+         mostSelled = findViewById(R.id.most_selled);
+         barChart =  findViewById(R.id.genchart);
 
         database= MyDatabase.getInstance(getApplicationContext());
         getSupportActionBar().setTitle("Chart Generated");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Cursor cursor=database.getCategory();
+        Cursor cursor =database.getCategory();
         if (cursor!=null){
             while (!cursor.isAfterLast()){
                 axisData[iter]=cursor.getString(1);
@@ -63,10 +61,6 @@ public class ChartGenerated extends AppCompatActivity {
                 cursor.moveToNext();
             }
         }
-        cate1.setText(axisData[0]);
-        cate2.setText(axisData[1]);
-        cate3.setText(axisData[2]);
-        cate4.setText(axisData[3]);
 
         // bar entries.
         barEntriesArrayList = new ArrayList<>();
@@ -76,7 +70,7 @@ public class ChartGenerated extends AppCompatActivity {
         barEntriesArrayList.add(new BarEntry(4f, yAxisData[3]));
 
         // creating a new bar data set.
-        barDataSet = new BarDataSet(barEntriesArrayList, "four category");
+        barDataSet = new BarDataSet(barEntriesArrayList, "Products");
 
         // creating a new bar data and
         // passing our bar data set.
@@ -94,7 +88,14 @@ public class ChartGenerated extends AppCompatActivity {
 
         // setting text size
         barDataSet.setValueTextSize(16f);
-        barChart.getDescription().setEnabled(false);
+        barChart.getDescription().setEnabled(true);
+        String productName=database.get_most_seeled();
+        if(!productName.isEmpty())
+        {
+            mostSelled.setText(productName);
+        }else{
+            mostSelled.setText("");
+        }
     }
 
     @Override

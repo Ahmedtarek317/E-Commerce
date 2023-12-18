@@ -30,7 +30,7 @@
         <activity android:name=".activity.CustomDialogClass"/>
         <activity android:name=".activity.ChartGenerated" />
         <activity android:name=".activity.ReportGenerated" />
-        <activity android:name=".activity.UserLocation" />
+       <activity android:name=".activity.EditProfile"/>
         <activity android:name=".activity.ScanCodeActivity" />
         <activity android:name=".activity.ShowRating" />
         <!--
@@ -49,7 +49,7 @@
             android:name=".activity.MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".activity.Forget_password" />
-        <activity android:name=".activity.AdminLogin" />
+
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.UploadProduct" />
         <activity android:name=".activity.SignUp" />

@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import com.example.e_commerce.Model.CategoryModel;
 import com.example.e_commerce.Model.CustomerModel;
 import com.example.e_commerce.Model.ProductModel;
-import com.example.e_commerce.Model.ProductModelBuilder;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,11 +48,7 @@ public class MyDatabase extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("create table cost (id integer primary key  autoincrement , costproducts REAL)");
 
-        sqLiteDatabase.execSQL("create table creditCard (id integer primary key autoincrement, " + "user_id integer not null, " +
-                "card_number text not null, " +
-                "expire_month integer not null, " +
-                "expire_year integer not null, " +
-                "foreign key (user_id) references user (id))");
+
     }
 
     @Override
@@ -63,7 +59,6 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("drop table if exists rating");
         db.execSQL("drop table if exists transactions");
         db.execSQL("drop table if exists cost");
-        db.execSQL("drop table if exists creditCard");
         onCreate(db);
     }
 
@@ -357,6 +352,15 @@ public class MyDatabase extends SQLiteOpenHelper {
         database.close();
         return cursor;
     }
+    public Cursor transQuantity(){
+        database=getReadableDatabase();
+        String []fields={"id","name","count"};
+        Cursor cursor= database.query("category",fields,null,null,null,null,null);
+        if (cursor.getCount()>0)
+            cursor.moveToFirst();
+        database.close();
+        return cursor;
+    }
 
     public Cursor getProductbyid(String id){
         database=getReadableDatabase();
@@ -433,5 +437,12 @@ public class MyDatabase extends SQLiteOpenHelper {
             return "error";
         else
             return "category deleted";
+    }
+    public String get_most_seeled() {
+        database = getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM  transactions WHERE  quantity = (SELECT MAX(quantity) FROM transactions)", null);
+        cursor.moveToFirst();
+        String product_name = cursor.getString(2);
+        return product_name;
     }
 }
