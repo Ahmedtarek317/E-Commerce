@@ -81,6 +81,7 @@
         android:layout_height="36dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
+        android:textAlignment="center"
         android:text="0"
         android:textSize="@dimen/_18sdp"
         app:layout_constraintEnd_toStartOf="@+id/increase_quantity1"

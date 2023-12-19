@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.Model.ProductModel;
 import com.example.e_commerce.R;
@@ -71,6 +70,7 @@ public class CartAdapter extends BaseAdapter{
         product_price.setText(currentItem.getPrice() + " $");
         quantityitem.setText(currentItem.getSelectedQuantity(currentItem.getProName())+"");
 
+
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +83,9 @@ public class CartAdapter extends BaseAdapter{
 
                 String str = db.getCateName(currentItem.getPro_id()+"");
                 //Toast.makeText(context, "fashion: "+db.getCatId(str), Toast.LENGTH_SHORT).show();
-                int num=db.getQuan(Integer.parseInt(db.getCatId(str))).getInt(0);
-                num-=Integer.parseInt(quantityitem.getText().toString());
-                db.updateCategory(num, Integer.parseInt(db.getCatId(str)));
+//                int num=db.getQuan(Integer.parseInt(db.getCatId(str))).getInt(0);
+//                num-=Integer.parseInt(quantityitem.getText().toString());
+//                db.updateCategory(num, Integer.parseInt(db.getCatId(str)));
                 //Toast.makeText(context, "fashion: "+num, Toast.LENGTH_SHORT).show();
 
                 list_id.remove(new Double(currentItem.getPro_id()));

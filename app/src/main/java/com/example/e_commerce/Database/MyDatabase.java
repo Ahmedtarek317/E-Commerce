@@ -440,9 +440,9 @@ public class MyDatabase extends SQLiteOpenHelper {
     }
     public String get_most_seeled() {
         database = getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM  transactions WHERE  quantity = (SELECT MAX(quantity) FROM transactions)", null);
+        Cursor cursor = database.rawQuery("SELECT * FROM  category WHERE  count = (SELECT MAX(count) FROM category)", null);
         cursor.moveToFirst();
-        String product_name = cursor.getString(2);
-        return product_name;
+        String categoryname = cursor.getString(1);
+        return categoryname;
     }
 }

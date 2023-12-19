@@ -103,14 +103,15 @@ public class ProductAdabter extends ArrayAdapter {
 
                     if(Integer.parseInt(item_quan.getText().toString())>0 && c.getInt(0)- Integer.valueOf(item_quan.getText().toString())>=0){
                         String str = db.getCateName(data.get(position).getPro_id()+"");
-
+                        db.updateProductSelected(Integer.parseInt(item_quan.getText().toString()),data.get(position).getProName());
                       for( Map.Entry<String,String>iterate:categories.entrySet())
                       {
-                        if(iterate.getKey()==str){
+                          if(iterate.getKey().equals(str)){
                             int x= Integer.parseInt(iterate.getValue());
                             int categ=db.getQuan(x).getInt(0);
                             Toast.makeText(getContext(), iterate.getKey()+":"+categ, Toast.LENGTH_SHORT).show();
-                            categ+=Integer.valueOf(item_quan.getText().toString());
+                            categ+=Integer.parseInt(item_quan.getText().toString());
+                            Toast.makeText(getContext(), item_quan+"", Toast.LENGTH_SHORT).show();
                             db.updateCategory(categ,x);
                             Toast.makeText(getContext(), iterate.getKey()+":"+categ, Toast.LENGTH_SHORT).show();
                             break;
@@ -127,8 +128,7 @@ public class ProductAdabter extends ArrayAdapter {
 
                         Toast.makeText(getContext(), "product added", Toast.LENGTH_SHORT).show();
 
-
-                        String uu= db.Insert_transactions(
+                        db.Insert_transactions(
                                 loginCustname,
                                 data.get(position).getProName(),
                                 db.getCateName(data.get(position).getPro_id()+""),

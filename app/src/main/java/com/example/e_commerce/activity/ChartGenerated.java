@@ -12,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.e_commerce.Database.MyDatabase;
 import com.example.e_commerce.R;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class ChartGenerated extends AppCompatActivity {
     String[] axisData ={"","","",""};
     int[] yAxisData = {0, 0, 0, 0};
     int iter=0;
-
+    int count=0;
     // variable for our bar chart
     TextView mostSelled;
     BarChart barChart;
@@ -56,7 +58,7 @@ public class ChartGenerated extends AppCompatActivity {
         Cursor cursor =database.getCategory();
         if (cursor!=null){
             while (!cursor.isAfterLast()){
-                axisData[iter]=cursor.getString(1);
+                axisData[count++]=cursor.getString(1);
                 yAxisData[iter++]=cursor.getInt(2);
                 cursor.moveToNext();
             }
@@ -64,13 +66,13 @@ public class ChartGenerated extends AppCompatActivity {
 
         // bar entries.
         barEntriesArrayList = new ArrayList<>();
-        barEntriesArrayList.add(new BarEntry(1f, yAxisData[0]));
-        barEntriesArrayList.add(new BarEntry(2f, yAxisData[1]));
-        barEntriesArrayList.add(new BarEntry(3f, yAxisData[2]));
-        barEntriesArrayList.add(new BarEntry(4f, yAxisData[3]));
+        barEntriesArrayList.add(new BarEntry(0f, yAxisData[0]));
+        barEntriesArrayList.add(new BarEntry(1f, yAxisData[1]));
+        barEntriesArrayList.add(new BarEntry(2f, yAxisData[2]));
+        barEntriesArrayList.add(new BarEntry(3f, yAxisData[3]));
 
         // creating a new bar data set.
-        barDataSet = new BarDataSet(barEntriesArrayList, "Products");
+        barDataSet = new BarDataSet(barEntriesArrayList, "Categories");
 
         // creating a new bar data and
         // passing our bar data set.
@@ -88,11 +90,15 @@ public class ChartGenerated extends AppCompatActivity {
 
         // setting text size
         barDataSet.setValueTextSize(16f);
-        barChart.getDescription().setEnabled(true);
-        String productName=database.get_most_seeled();
-        if(!productName.isEmpty())
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(axisData));
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        barChart.getDescription().setEnabled(false);
+        String catNAME=database.get_most_seeled();
+        if(!catNAME.isEmpty())
         {
-            mostSelled.setText(productName);
+            mostSelled.setText(catNAME);
         }else{
             mostSelled.setText("");
         }
